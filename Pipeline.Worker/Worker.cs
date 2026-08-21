@@ -31,19 +31,13 @@ public sealed class Worker : BackgroundService
                 //    - Decide how to handle failed/retryable files
 
 
-                // 3. Verify the file is ready to process
-                //    - Confirm the file is stable
-                //    - Confirm it is not still being written
-                //    - Confirm the file can be opened/read
-
-
-                // 4. Register the file as an ETL import
+                // 3. Register the file as an ETL import
                 //    - Create a FileImport record
                 //    - Assign an ImportId / LoadId
                 //    - Set status = Pending
 
 
-                // 5. Queue the file for processing
+                // 4. Queue the file for processing
                 //    - Create a FileJob
                 //    - Add it to the bounded job queue
                 //    - Worker threads will process jobs separately
@@ -56,7 +50,7 @@ public sealed class Worker : BackgroundService
             }
 
 
-            // 6. Wait before scanning source folders again
+            // 5. Wait before scanning source folders again
             await Task.Delay(
                 TimeSpan.FromSeconds(30),
                 stoppingToken
