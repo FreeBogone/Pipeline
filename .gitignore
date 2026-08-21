@@ -1,0 +1,3 @@
+# Ignore all build output and intermediate folders
+[Bb]in/
+[Oo]bj/
