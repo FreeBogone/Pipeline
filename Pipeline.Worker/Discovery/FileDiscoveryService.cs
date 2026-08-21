@@ -27,12 +27,12 @@ public sealed class FileDiscoveryService
         foreach (var dataset in _datasets)
         {
             // check if directory exists or not
-            if (!Directory.Exists(dataset.Path))
+            if (!Directory.Exists(dataset.SourcePath))
             {
                 _logger.LogWarning(
-                    "Dataset source path does not exist. Dataset={Dataset}, Path={Path}",
+                    "Dataset source path does not exist. Dataset={Dataset}, Path={SourcePath}",
                     dataset.Name,
-                    dataset.Path
+                    dataset.SourcePath
                 );
                 continue;
             }
@@ -40,7 +40,7 @@ public sealed class FileDiscoveryService
             // get all files in directory (not recursive)
             // to change to recursive, use SearchOption.AllDirectories
             var files = Directory.EnumerateFiles(
-                dataset.Path,
+                dataset.SourcePath,
                 dataset.FilePattern,
                 SearchOption.TopDirectoryOnly
                 // SearchOption.AllDirectories
