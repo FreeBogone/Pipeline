@@ -29,16 +29,11 @@ public sealed class FileDiscoveryWorker : BackgroundService
 
             foreach (var file in files)
             {
-                // _logger.LogInformation(
-                //     "Discovered file. Dataset={Dataset}, File={File}",
-                //     file.DatasetName,
-                //     file.FilePath
-                // );
-
-                // 2. Check whether the file has already been processed
-                //    - Look up the file in ETL metadata/history
-                //    - Skip completed files
-                //    - Decide how to handle failed/retryable files
+                if (await _fileJobService.IsProcessedAsync(file, stoppingToken))
+                {
+                    _logger.LogDebug("Skipping already processed file: {File}", file);
+                    continue;
+                }
 
                 // 3. Queue the file
                 await _fileJobService.QueueAsync(file, stoppingToken);
