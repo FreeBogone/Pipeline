@@ -25,6 +25,7 @@ public sealed class ConfigurationRepository
                 DisplayName,
                 SourcePath,
                 FilePattern,
+                DestinationTableName,
                 StabilityCheckSeconds,
                 IsEnabled,
                 CreatedAt,
@@ -51,6 +52,48 @@ public sealed class ConfigurationRepository
         return datasets;  
     }
 
+    public async Task<Dataset> GetDatasetByIdAsync
+    (
+        long datasetId,
+        CancellationToken cancellationToken
+    )
+    {
+        const string sql = """
+            SELECT 
+                Id, 
+                DatasetKey,
+                DisplayName,
+                SourcePath,
+                FilePattern,
+                DestinationTableName,
+                StabilityCheckSeconds,
+                IsEnabled,
+                CreatedAt,
+                UpdatedAt
+            FROM dbo.Dataset
+            WHERE @DatasetId
+            """;
+        
+        var dataset = new Dataset();
+
+        await using var connection =
+            await _connectionFactory.OpenConnectionAsync(cancellationToken);
+
+        await using var command = new SqlCommand(sql, connection);
+
+        command.Parameters.AddWithValue("@DatasetId", datasetId);
+
+        await using var reader =
+            await command.ExecuteReaderAsync(cancellationToken);
+
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            dataset = MapDataset(reader);
+        }
+
+        return dataset;  
+    }
+
     private static Dataset MapDataset(SqlDataReader reader)
     {
         return new Dataset
@@ -69,6 +112,9 @@ public sealed class ConfigurationRepository
             FilePattern =
                 reader.GetString(reader.GetOrdinal("FilePattern")),
 
+            DestinationTableName =
+                reader.GetString(reader.GetOrdinal("DestinationTableName")),
+
             StabilityCheckSeconds =
                 reader.GetInt32(reader.GetOrdinal("StabilityCheckSeconds")),
 
@@ -85,7 +131,7 @@ public sealed class ConfigurationRepository
         };
     }
 
-    public async Task<ICollection<DatasetColumnMapping>> GetDatasetColumnMappingById
+    public async Task<IReadOnlyList<DatasetColumnMapping>> GetDatasetColumnMappingByIdAsync
     (
         long datasetId,
         CancellationToken cancellationToken

@@ -3,6 +3,7 @@ using Pipeline.Worker.Configuration;
 using Pipeline.Worker.Data;
 using Pipeline.Worker.Discovery;
 using Pipeline.Worker.Jobs;
+using Pipeline.Worker.Processing;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Services.AddSqlServer(builder.Configuration);
 builder.Services.AddSingleton<ConfigurationRepository>();
 builder.Services.AddSingleton<FileStabilityChecker>();
 builder.Services.AddSingleton<FileDiscoveryService>();
+builder.Services.AddSingleton<FileDataReaderFactory>();
+builder.Services.AddSingleton<BulkDataWriter>();
+builder.Services.AddSingleton<FileProcessingService>();
 builder.Services.AddSingleton<FileJobRepository>();
 builder.Services.AddSingleton<FileJobService>();
 

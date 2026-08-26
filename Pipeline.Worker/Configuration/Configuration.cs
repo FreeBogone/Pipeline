@@ -7,6 +7,7 @@ public sealed class Dataset
     public String DisplayName { get; set; } = string.Empty;
     public String SourcePath { get; set; } = string.Empty;
     public String FilePattern { get; set; } = string.Empty;
+    public String DestinationTableName { get; set; } = string.Empty;
     public int StabilityCheckSeconds { get; set; }
     public bool IsEnabled { get; set; }
     public DateTime CreatedAt { get; set; }

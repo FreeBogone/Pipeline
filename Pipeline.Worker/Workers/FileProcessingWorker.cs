@@ -4,6 +4,7 @@ using Pipeline.Worker.Discovery;
 using Pipeline.Worker.Jobs;
 using Microsoft.Extensions.Options;
 using System.Security;
+using Pipeline.Worker.Processing;
 
 namespace Pipeline.Worker;
 
@@ -11,16 +12,19 @@ public sealed class FileProcessingWorker : BackgroundService
 {
     private readonly FileJobService _fileJobService;
     private readonly ProcessingOptions _options;
+    private readonly FileProcessingService _processor;
     private readonly ILogger<FileProcessingWorker> _logger;
 
     public FileProcessingWorker(
         FileJobService fileJobService,
         IOptions<ProcessingOptions> options,
+        FileProcessingService processor,
         ILogger<FileProcessingWorker> logger
     )
     {
         _fileJobService = fileJobService;
         _options = options.Value;
+        _processor = processor;
         _logger = logger;
     }
 
@@ -88,7 +92,7 @@ private async ValueTask ProcessJobAsync(
             );
 
             // Process the file
-            // await _processor.ProcessAsync(job, cancellationToken);
+            await _processor.ProcessAsync(job, cancellationToken);
 
             await _fileJobService.CompleteAsync(
                 job.Id,
