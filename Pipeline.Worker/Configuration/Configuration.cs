@@ -13,6 +13,17 @@ public sealed class Dataset
     public DateTime? UpdatedAt { get; set; }
 }
 
+public sealed class DatasetColumnMapping
+{
+    public long Id { get; set; }
+    public long DatasetId { get; set; }
+    public int SourceColumnIndex { get; set; }
+    public string DestinationColumnName { get; set; } = string.Empty;
+    public int DestinationColumnIndex { get; set; }
+    public string TargetType { get; set; } = string.Empty;
+    public bool IsRequired { get; set; } 
+}
+
 public sealed class ProcessingOptions
 {
     public int MaxWorkers { get; init; } = 10;

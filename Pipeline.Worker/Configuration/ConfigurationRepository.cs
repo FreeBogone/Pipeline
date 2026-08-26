@@ -84,4 +84,63 @@ public sealed class ConfigurationRepository
                     : reader.GetDateTime(reader.GetOrdinal("UpdatedAt"))
         };
     }
+
+    public async Task<ICollection<DatasetColumnMapping>> DatasetColumnMappingById
+    (
+        long datasetId,
+        CancellationToken cancellationToken
+    )
+    {
+        const string sql = """
+            SELECT 
+                Id, 
+                DatasetId,
+                SourceColumnIndex,
+                DestinationColumnName,
+                DestinationColumnIndex,
+                TargetType,
+                IsRequired
+            FROM dbo.DatasetColumnMappings
+            WHERE DatasetId = @DatasetId;
+            """;
+        
+        var ColumnMappings = new List<DatasetColumnMapping>();
+
+        await using var connection =
+            await _connectionFactory.OpenConnectionAsync(cancellationToken);
+
+        await using var command = new SqlCommand(sql, connection);
+        
+        command.Parameters.AddWithValue("@DatasetId", datasetId);
+        
+        await using var reader =
+            await command.ExecuteReaderAsync(cancellationToken);
+
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            ColumnMappings.Add(MapDatasetColumnMappings(reader));
+        }
+
+        return ColumnMappings;  
+    }
+
+    private static DatasetColumnMapping MapDatasetColumnMappings(SqlDataReader reader)
+    {
+        return new DatasetColumnMapping
+        {
+            Id = reader.GetInt64(reader.GetOrdinal("Id")),
+
+            DatasetId = reader.GetInt64(reader.GetOrdinal("DatasetId")),
+
+            SourceColumnIndex = reader.GetInt32(reader.GetOrdinal("SourceColumnIndex")),
+
+            DestinationColumnName = reader.GetString(reader.GetOrdinal("DestinationColumnName")),
+
+            DestinationColumnIndex = reader.GetInt32(reader.GetOrdinal("DestinationColumnIndex")),
+
+            TargetType = reader.GetString(reader.GetOrdinal("TargetType")),
+
+            IsRequired = reader.GetBoolean(reader.GetOrdinal("IsRequired")),
+        };
+    }
 }
