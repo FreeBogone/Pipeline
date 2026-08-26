@@ -47,19 +47,18 @@ FileJob
     string FilePath
     string FileName
     string Status			-- "Pending" or "Processing" or "Complete" or "Failed"
+    int AttemptCount
     string DiscoveredAt
     DateTime? StartedAt
     DateTime? CompletedAt
     string? ErrorMessage
 
--- FUTURE:
 DatasetColumnMappings
 	String DatasetName
     String SourceColumn
     String DestinationColumn
     String DataType
     Bool Required
-
 ```
 
 ## Architecture
