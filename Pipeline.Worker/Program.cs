@@ -17,7 +17,7 @@ builder.Services.AddSingleton<FileDiscoveryService>();
 builder.Services.AddSingleton<FileJobRepository>();
 builder.Services.AddSingleton<FileJobService>();
 
-builder.Services.AddHostedService<Worker>();
+builder.Services.AddHostedService<FileDiscoveryWorker>();
 
 var host = builder.Build();
 host.Run();

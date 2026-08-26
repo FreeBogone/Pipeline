@@ -3,16 +3,16 @@ using Pipeline.Worker.Jobs;
 
 namespace Pipeline.Worker;
 
-public sealed class Worker : BackgroundService
+public sealed class FileDiscoveryWorker : BackgroundService
 {
     private readonly FileDiscoveryService _fileDiscoveryService;
     private readonly FileJobService _fileJobService;
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<FileDiscoveryWorker> _logger;
 
-    public Worker(
+    public FileDiscoveryWorker(
         FileDiscoveryService fileDiscoveryService,
         FileJobService fileJobService,
-        ILogger<Worker> logger
+        ILogger<FileDiscoveryWorker> logger
     )
     {
         _fileDiscoveryService = fileDiscoveryService;
