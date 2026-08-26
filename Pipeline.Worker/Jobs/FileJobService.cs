@@ -41,4 +41,21 @@ public sealed class FileJobService
 
         return jobs;
     }
+
+    public async Task CompleteAsync (
+        long jobId,
+        CancellationToken cancellationToken
+    )
+    {
+        await _repository.CompleteAsync(jobId, cancellationToken);
+    }
+
+    public async Task FailAsync (
+        long jobId,
+        string errorMessage,
+        CancellationToken cancellationToken
+    )
+    {
+        await _repository.FailAsync(jobId, errorMessage, cancellationToken);
+    }
 }
