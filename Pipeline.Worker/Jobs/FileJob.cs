@@ -4,9 +4,8 @@ public sealed class FileJob
 {
     public long Id { get; set; }
 
-    public required string DatasetName { get; set; }
+    public required long DatasetId { get; set; }
     public required string FilePath { get; set; }
-    public string FileName { get; set; } = string.Empty;
     public FileJobStatus Status { get; set; }
     public int AttemptCount { get; set; }
     public DateTime DiscoveredAt { get; set; }

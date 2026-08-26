@@ -14,7 +14,7 @@ public sealed class FileJobRepository
     }
 
     public async Task<bool> ExistsAsync(
-        string datasetName,
+        long datasetId,
         string filePath,
         CancellationToken cancellationToken
     )
@@ -22,7 +22,7 @@ public sealed class FileJobRepository
         const string sql = """
             SELECT TOP (1) 1
             FROM dbo.FileJob
-            WHERE DatasetName = @DatasetName
+            WHERE DatasetId = @DatasetId
               AND FilePath = @FilePath;
             """;
 
@@ -31,7 +31,7 @@ public sealed class FileJobRepository
 
         await using var command = new SqlCommand(sql, connection);
 
-        command.Parameters.AddWithValue("@DatasetName", datasetName);
+        command.Parameters.AddWithValue("@DatasetId", datasetId);
         command.Parameters.AddWithValue("@FilePath", filePath);
 
         var result = await command.ExecuteScalarAsync(cancellationToken);
@@ -47,13 +47,13 @@ public sealed class FileJobRepository
         const string sql = """
             INSERT INTO dbo.FileJob
             (
-                DatasetName,
+                DatasetId,
                 FilePath,
                 Status
             )
             VALUES
             (
-                @DatasetName,
+                @DatasetId,
                 @FilePath,
                 'Pending'
             );
@@ -65,8 +65,8 @@ public sealed class FileJobRepository
         await using var command = new SqlCommand(sql, connection);
 
         command.Parameters.AddWithValue(
-            "@DatasetName",
-            file.DatasetName);
+            "@DatasetId",
+            file.DatasetId);
 
         command.Parameters.AddWithValue(
             "@FilePath",
@@ -95,7 +95,7 @@ public sealed class FileJobRepository
                 AttemptCount = AttemptCount + 1
             OUTPUT
                 inserted.Id,
-                inserted.DatasetName,
+                inserted.DatasetId,
                 inserted.FilePath,
                 inserted.Status,
                 inserted.DiscoveredAt,
@@ -180,8 +180,8 @@ public sealed class FileJobRepository
         {
             Id = reader.GetInt64(reader.GetOrdinal("Id")),
 
-            DatasetName =
-                reader.GetString(reader.GetOrdinal("DatasetName")),
+            DatasetId =
+                reader.GetInt64(reader.GetOrdinal("DatasetId")),
 
             FilePath =
                 reader.GetString(reader.GetOrdinal("FilePath")),

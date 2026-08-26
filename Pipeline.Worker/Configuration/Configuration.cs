@@ -1,11 +1,16 @@
 namespace Pipeline.Worker.Configuration;
 
-public sealed class DatasetOptions
+public sealed class Dataset
 {
-    public String Name { get; init; } = string.Empty;
-    public String SourcePath { get; init; } = string.Empty;
-    public String FilePattern { get; init; } = "*.csv";
-    public int StabilityCheckSeconds { get; init; } = 10;
+    public long Id { get; set; }
+    public String DatasetKey { get; set; } = string.Empty;
+    public String DisplayName { get; set; } = string.Empty;
+    public String SourcePath { get; set; } = string.Empty;
+    public String FilePattern { get; set; } = string.Empty;
+    public int StabilityCheckSeconds { get; set; }
+    public bool IsEnabled { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }
 
 public sealed class ProcessingOptions

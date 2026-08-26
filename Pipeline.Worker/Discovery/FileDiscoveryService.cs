@@ -5,17 +5,17 @@ namespace Pipeline.Worker.Discovery;
 
 public sealed class FileDiscoveryService
 {
-    private readonly IReadOnlyList<DatasetOptions> _datasets;
+    private readonly ConfigurationRepository _configRepository;
     private readonly FileStabilityChecker _stabilityChecker;
     private readonly ILogger<FileDiscoveryService> _logger;
 
     public FileDiscoveryService(
-        IOptions<List<DatasetOptions>> options,
+        ConfigurationRepository configRepository,
         FileStabilityChecker stabilityChecker,
         ILogger<FileDiscoveryService> logger
     )
     {
-        _datasets = options.Value;
+        _configRepository = configRepository;
         _stabilityChecker = stabilityChecker;
         _logger = logger;
     }
@@ -24,6 +24,9 @@ public sealed class FileDiscoveryService
     {
         var discoveredFiles = new List<DiscoveredFile>();
 
+        // get all datasets from config
+        var _datasets = await _configRepository.GetAllDatasetsAsync(cancellationToken);
+
         foreach (var dataset in _datasets)
         {
             // check if directory exists or not
@@ -31,7 +34,7 @@ public sealed class FileDiscoveryService
             {
                 _logger.LogWarning(
                     "Dataset source path does not exist. Dataset={Dataset}, Path={SourcePath}",
-                    dataset.Name,
+                    dataset.DisplayName,
                     dataset.SourcePath
                 );
                 continue;
@@ -61,7 +64,7 @@ public sealed class FileDiscoveryService
                 {
                     _logger.LogDebug(
                         "Skipping unstable file. Dataset={Dataset}, Path={Path}",
-                        dataset.Name,
+                        dataset.DisplayName,
                         filePath
                     );
 
@@ -69,11 +72,11 @@ public sealed class FileDiscoveryService
                 }
 
                 // add to list of discovered files
-                discoveredFiles.Add(new DiscoveredFile(dataset.Name, filePath));
+                discoveredFiles.Add(new DiscoveredFile(dataset.Id, filePath));
 
                 _logger.LogInformation(
                     "Discovered file. Dataset={Dataset}, File={File}",
-                    dataset.Name,
+                    dataset.DisplayName,
                     filePath
                 );
             }

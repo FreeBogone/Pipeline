@@ -19,7 +19,7 @@ public sealed class FileJobService
     )
     {
         if (await _repository.ExistsAsync(
-            file.DatasetName,
+            file.DatasetId,
             file.FilePath,
             cancellationToken
         ))

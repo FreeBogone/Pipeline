@@ -1,6 +1,6 @@
 namespace Pipeline.Worker.Discovery;
 
 public sealed record DiscoveredFile(
-    string DatasetName,
+    long DatasetId,
     string FilePath
 );
