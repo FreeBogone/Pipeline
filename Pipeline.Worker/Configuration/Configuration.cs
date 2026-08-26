@@ -7,3 +7,9 @@ public sealed class DatasetOptions
     public String FilePattern { get; init; } = "*.csv";
     public int StabilityCheckSeconds { get; init; } = 10;
 }
+
+public sealed class ProcessingOptions
+{
+    public int MaxWorkers { get; init; } = 10;
+    public int PollIntervalSeconds { get; init; } = 2;
+}

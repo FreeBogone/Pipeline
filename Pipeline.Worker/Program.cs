@@ -10,6 +10,10 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.Configure<List<DatasetOptions>>(
     builder.Configuration.GetSection("Datasets"));
 
+// Get processing configurations
+builder.Services.Configure<ProcessingOptions>(
+    builder.Configuration.GetSection("Processing"));
+
 // register services
 builder.Services.AddSqlServer(builder.Configuration);
 builder.Services.AddSingleton<FileStabilityChecker>();
@@ -18,6 +22,7 @@ builder.Services.AddSingleton<FileJobRepository>();
 builder.Services.AddSingleton<FileJobService>();
 
 builder.Services.AddHostedService<FileDiscoveryWorker>();
+builder.Services.AddHostedService<FileProcessingWorker>();
 
 var host = builder.Build();
 host.Run();
