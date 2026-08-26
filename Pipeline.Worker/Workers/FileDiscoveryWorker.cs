@@ -29,17 +29,12 @@ public sealed class FileDiscoveryWorker : BackgroundService
 
             foreach (var file in files)
             {
-                if (await _fileJobService.IsProcessedAsync(file, stoppingToken))
-                {
-                    _logger.LogDebug("Skipping already processed file: {File}", file);
-                    continue;
-                }
 
-                // 3. Queue the file
+                // 2. Queue the file
                 await _fileJobService.QueueAsync(file, stoppingToken);
             }
 
-            // 5. Wait before scanning source folders again
+            // 3. Wait before scanning source folders again
             await Task.Delay(
                 TimeSpan.FromSeconds(10),
                 stoppingToken

@@ -28,21 +28,4 @@ public sealed class FileJobService
 
         await _repository.CreateAsync(file, cancellationToken);
     }
-
-    public async Task<bool> IsProcessedAsync(
-        DiscoveredFile file,
-        CancellationToken cancellationToken
-    )
-    {
-        if(await _repository.IsProcessedAsync(
-            file.DatasetName,
-            file.FilePath,
-            cancellationToken
-        ))
-        {
-            return true;
-        }
-
-        return false;
-    }
 }

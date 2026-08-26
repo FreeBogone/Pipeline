@@ -39,33 +39,6 @@ public sealed class FileJobRepository
         return result is not null;
     }
 
-    public async Task<bool> IsProcessedAsync(
-        string datasetName,
-        string filePath,
-        CancellationToken cancellationToken
-    )
-    {
-        const string sql = """
-            SELECT TOP (1) 1
-            FROM dbo.FileJob
-            WHERE DatasetName = @DatasetName
-              AND FilePath = @FilePath
-              AND Status = 'Completed'
-            """;
-
-        await using var connection =
-            await _connectionFactory.OpenConnectionAsync(cancellationToken);
-
-        await using var command = new SqlCommand(sql, connection);
-
-        command.Parameters.AddWithValue("@DatasetName", datasetName);
-        command.Parameters.AddWithValue("@FilePath", filePath);
-
-        var result = await command.ExecuteScalarAsync(cancellationToken);
-
-        return result is not null;
-    }
-
     public async Task CreateAsync(
         DiscoveredFile file,
         CancellationToken cancellationToken
