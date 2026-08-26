@@ -53,6 +53,7 @@ FileJob
     DateTime? CompletedAt
     string? ErrorMessage
 
+-- FUTURE
 DatasetColumnMappings
 	String DatasetName
     String SourceColumn
