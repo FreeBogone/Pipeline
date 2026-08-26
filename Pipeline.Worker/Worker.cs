@@ -40,11 +40,9 @@ public sealed class Worker : BackgroundService
                 //    - Skip completed files
                 //    - Decide how to handle failed/retryable files
 
-
                 // 3. Queue the file
                 await _fileJobService.QueueAsync(file, stoppingToken);
             }
-
 
             // 5. Wait before scanning source folders again
             await Task.Delay(
