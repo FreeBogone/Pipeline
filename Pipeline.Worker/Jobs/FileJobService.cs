@@ -1,0 +1,31 @@
+using Pipeline.Worker.Discovery;
+
+namespace Pipeline.Worker.Jobs;
+
+public sealed class FileJobService
+{
+    private readonly FileJobRepository _repository;
+    private readonly ILogger<FileJobService> _logger;
+    public FileJobService(FileJobRepository repository, ILogger<FileJobService> logger)
+    {
+        _repository = repository;
+        _logger = logger;
+    }
+
+    public async Task QueueAsync(
+        DiscoveredFile file,
+        CancellationToken cancellationToken
+    )
+    {
+        if (await _repository.ExistsAsync(
+            file.DatasetName,
+            file.FilePath,
+            cancellationToken
+        ))
+        {
+            return;
+        }
+
+        await _repository.CreateAsync(file, cancellationToken);
+    }
+}

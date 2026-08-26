@@ -70,6 +70,12 @@ public sealed class FileDiscoveryService
 
                 // add to list of discovered files
                 discoveredFiles.Add(new DiscoveredFile(dataset.Name, filePath));
+
+                _logger.LogInformation(
+                    "Discovered file. Dataset={Dataset}, File={File}",
+                    dataset.Name,
+                    filePath
+                );
             }
         }
 
