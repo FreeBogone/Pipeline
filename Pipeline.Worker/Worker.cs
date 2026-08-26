@@ -46,7 +46,7 @@ public sealed class Worker : BackgroundService
 
             // 5. Wait before scanning source folders again
             await Task.Delay(
-                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(10),
                 stoppingToken
             );
         }
