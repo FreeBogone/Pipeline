@@ -8,6 +8,7 @@ public sealed class FileJob
     public required string FilePath { get; set; }
     public string FileName { get; set; } = string.Empty;
     public FileJobStatus Status { get; set; }
+    public int AttemptCount { get; set; }
     public DateTime DiscoveredAt { get; set; }
     public DateTime? StartedAt { get; set; }
     public DateTime? CompletedAt { get; set; }

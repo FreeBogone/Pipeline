@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Pipeline.Worker.Discovery;
 
 namespace Pipeline.Worker.Jobs;
@@ -27,5 +28,17 @@ public sealed class FileJobService
         }
 
         await _repository.CreateAsync(file, cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<FileJob>> ClaimPendingAsync(
+        int count,
+        CancellationToken cancellationToken
+    )
+    {
+        var jobs = await _repository.ClaimPendingAsync(
+            count, cancellationToken
+        );
+
+        return jobs;
     }
 }

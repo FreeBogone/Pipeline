@@ -8,21 +8,18 @@ namespace Pipeline.Worker;
 
 public sealed class FileProcessingWorker : BackgroundService
 {
-    // private readonly FileDiscoveryService _fileDiscoveryService;
-    private readonly ProcessingOptions _options;
     private readonly FileJobService _fileJobService;
+    private readonly ProcessingOptions _options;
     private readonly ILogger<FileProcessingWorker> _logger;
 
     public FileProcessingWorker(
-        // FileDiscoveryService fileDiscoveryService,
-        IOptions<ProcessingOptions> options,
         FileJobService fileJobService,
+        IOptions<ProcessingOptions> options,
         ILogger<FileProcessingWorker> logger
     )
     {
-        // _fileDiscoveryService = fileDiscoveryService;
-        _options = options.Value;
         _fileJobService = fileJobService;
+        _options = options.Value;
         _logger = logger;
     }
 
@@ -33,13 +30,13 @@ public sealed class FileProcessingWorker : BackgroundService
             _logger.LogInformation(
                 "Polling Queue for jobs"
             );
-            // 1. Scan the FileJob queue
 
-            // 2. Claim Jobs up to Max Workers
+            // 1. Claim Pending Jobs up to Max Workers
+            // var jobs = await _fileJobService.ClaimPendingAsync(_options.MaxWorkers, stoppingToken);
 
-            // 3. Process then Concurrently (up to MaxWorkers)
-
-            // 4. Wait before scanning queue again
+            // 2. Process them Concurrently (up to MaxWorkers)
+            
+            // 3. Wait before scanning queue again
             await Task.Delay(
                 TimeSpan.FromSeconds(_options.PollIntervalSeconds),
                 stoppingToken

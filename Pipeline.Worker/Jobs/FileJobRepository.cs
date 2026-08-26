@@ -189,6 +189,8 @@ public sealed class FileJobRepository
             Status =
                 Enum.Parse<FileJobStatus>(reader.GetString(reader.GetOrdinal("Status"))),
 
+            AttemptCount = reader.GetInt32(reader.GetOrdinal("AttemptCount")),
+
             DiscoveredAt =
                 reader.GetDateTime(reader.GetOrdinal("DiscoveredAt")),
 
