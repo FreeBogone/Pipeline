@@ -85,7 +85,7 @@ public sealed class ConfigurationRepository
         };
     }
 
-    public async Task<ICollection<DatasetColumnMapping>> DatasetColumnMappingById
+    public async Task<ICollection<DatasetColumnMapping>> GetDatasetColumnMappingById
     (
         long datasetId,
         CancellationToken cancellationToken
@@ -97,7 +97,6 @@ public sealed class ConfigurationRepository
                 DatasetId,
                 SourceColumnIndex,
                 DestinationColumnName,
-                DestinationColumnIndex,
                 TargetType,
                 IsRequired
             FROM dbo.DatasetColumnMappings
@@ -135,8 +134,6 @@ public sealed class ConfigurationRepository
             SourceColumnIndex = reader.GetInt32(reader.GetOrdinal("SourceColumnIndex")),
 
             DestinationColumnName = reader.GetString(reader.GetOrdinal("DestinationColumnName")),
-
-            DestinationColumnIndex = reader.GetInt32(reader.GetOrdinal("DestinationColumnIndex")),
 
             TargetType = reader.GetString(reader.GetOrdinal("TargetType")),
 

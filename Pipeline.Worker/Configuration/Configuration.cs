@@ -19,7 +19,6 @@ public sealed class DatasetColumnMapping
     public long DatasetId { get; set; }
     public int SourceColumnIndex { get; set; }
     public string DestinationColumnName { get; set; } = string.Empty;
-    public int DestinationColumnIndex { get; set; }
     public string TargetType { get; set; } = string.Empty;
     public bool IsRequired { get; set; } 
 }

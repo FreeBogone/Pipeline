@@ -32,7 +32,6 @@ CREATE TABLE DatasetColumnMapping
 	DatasetId BIGINT FOREIGN KEY REFERENCES Dataset(Id),
 	SourceColumnIndex int NOT NULL,
 	DestinationColumnName nvarchar(100) NOT NULL,
-	DestinationColumnIndex int NOT NULL,
 	TargetType nvarchar(50),
 	IsRequired bit NOT NULL DEFAULT 1
 )
