@@ -52,7 +52,7 @@ public sealed class ConfigurationRepository
         return datasets;  
     }
 
-    public async Task<Dataset> GetDatasetByIdAsync
+    public async Task<Dataset?> GetDatasetByIdAsync
     (
         long datasetId,
         CancellationToken cancellationToken
@@ -71,10 +71,8 @@ public sealed class ConfigurationRepository
                 CreatedAt,
                 UpdatedAt
             FROM dbo.Dataset
-            WHERE @DatasetId
+            WHERE Id = @DatasetId;
             """;
-        
-        var dataset = new Dataset();
 
         await using var connection =
             await _connectionFactory.OpenConnectionAsync(cancellationToken);
@@ -86,12 +84,9 @@ public sealed class ConfigurationRepository
         await using var reader =
             await command.ExecuteReaderAsync(cancellationToken);
 
-        while (await reader.ReadAsync(cancellationToken))
-        {
-            dataset = MapDataset(reader);
-        }
-
-        return dataset;  
+        return await reader.ReadAsync(cancellationToken)
+            ? MapDataset(reader)
+            : null;
     }
 
     private static Dataset MapDataset(SqlDataReader reader)
@@ -145,7 +140,7 @@ public sealed class ConfigurationRepository
                 DestinationColumnName,
                 TargetType,
                 IsRequired
-            FROM dbo.DatasetColumnMappings
+            FROM dbo.DatasetColumnMapping
             WHERE DatasetId = @DatasetId;
             """;
         
